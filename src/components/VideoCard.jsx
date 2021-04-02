@@ -1,30 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const VideoCard = ({ data }) => {
-  const formattedDate = new Date(data.snippet.publishedAt);
-  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(formattedDate);
-  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(formattedDate);
-  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(formattedDate);
-
-  return (
-    <Card data-testid={data.etag}>
-      <header>
-        <img src={data.snippet.thumbnails.medium.url} alt={data.snippet.title} />
-        <div>{data.snippet.title}</div>
-      </header>
-      {data.snippet.description !== '' ? (
-        <div>{data.snippet.description}</div>
-      ) : (
-        <div>{`${data.snippet.channelTitle} - ${da} ${mo}, ${ye}`}</div>
-      )}
-    </Card>
-  );
-};
-
-export default VideoCard;
-
-const Card = styled.div`
+const Card = styled.article`
   overflow: hidden;
   border-radius: 5px;
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.75);
@@ -65,3 +42,26 @@ const Card = styled.div`
     font-size: 0.7em;
   }
 `;
+
+const VideoCard = ({ data }) => {
+  const formattedDate = new Date(data.snippet.publishedAt);
+  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(formattedDate);
+  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(formattedDate);
+  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(formattedDate);
+
+  return (
+    <Card>
+      <header>
+        <img src={data.snippet.thumbnails.medium.url} alt={data.etag} />
+        <div>{data.snippet.title}</div>
+      </header>
+      {data.snippet.description !== '' ? (
+        <div>{data.snippet.description}</div>
+      ) : (
+        <div>{`${data.snippet.channelTitle} - ${da} ${mo}, ${ye}`}</div>
+      )}
+    </Card>
+  );
+};
+
+export default VideoCard;

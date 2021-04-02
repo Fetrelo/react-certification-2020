@@ -1,24 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const Toggle = ({ labelOn, labelOff }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheck = (e) => {
-    setIsChecked(e.target.checked);
-  };
-
-  return (
-    <CheckBoxWrapper data-testid="toggleDarkMode">
-      <CheckBox id="checkbox" type="checkbox" onChange={handleCheck} />
-      <CheckBoxLabel htmlFor="checkbox" />
-      <label htmlFor="checkbox">{isChecked ? labelOn : labelOff}</label>
-    </CheckBoxWrapper>
-  );
-};
-
-export default Toggle;
-
 const CheckBoxWrapper = styled.div`
   width: fit-content;
   position: relative;
@@ -68,3 +50,24 @@ const CheckBox = styled.input`
     }
   }
 `;
+
+const Toggle = ({ labelOn, labelOff }) => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheck = () => setIsChecked(!isChecked);
+
+  return (
+    <CheckBoxWrapper role="switch">
+      <CheckBox
+        id="checkbox"
+        type="checkbox"
+        onChange={handleCheck}
+        checked={isChecked}
+      />
+      <CheckBoxLabel htmlFor="checkbox" />
+      <label htmlFor="checkbox">{isChecked ? labelOn : labelOff}</label>
+    </CheckBoxWrapper>
+  );
+};
+
+export default Toggle;

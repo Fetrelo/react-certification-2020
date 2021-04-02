@@ -1,39 +1,36 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import {cleanup, render, screen} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import HomePage from "../pages/Home/Home.page";
 import youtubeVideos from "../mocks/youtube-videos";
 
-describe('Home page Tests', () => {
-  afterEach(cleanup);
+test('Ensure the elements get rendered', () => {
+  render(<HomePage />);
+  expect(screen.getByRole('heading', { name: /YouTube video search app/i })).toBeInTheDocument();
+  expect(screen.getByRole('grid')).toBeInTheDocument();
+  expect(screen.getAllByRole('article')).toBeTruthy();
+});
 
-  describe('Ensure elements get rendered', () => {
-    it('Title', () => {
-      render(<HomePage />);
-      expect(screen.getByText(/YouTube video search app/, {selector: 'h1'})).toBeInTheDocument();
-    });
-  });
+test('The information from the mock data is rendered as expected', () => {
+  render(<HomePage />);
+  // A random video's information will be displayed if it has videoid
+  const randVideoIdx = Math.floor((Math.random() * youtubeVideos.items.length)) + 1;
+  let randomVideo = youtubeVideos.items[randVideoIdx];
+  expect(screen.getByRole('img', {name: randomVideo.etag })).toBeInTheDocument();
 
-  describe('Ensure there the info from the mock is being shown', () => {
-    it("A random video's information will be displayed if it has videoid", () => {
-      render(<HomePage />);
-      const randVideoIdx = Math.floor((Math.random() * youtubeVideos.items.length));
-      const randomVideo = youtubeVideos.items[randVideoIdx];
+  // The first item (not a video) information shouldn't be shown
+  randomVideo = youtubeVideos.items[0];
+  expect(screen.queryByRole('img', {name: randomVideo.etag})).not.toBeInTheDocument();
 
-      if(randomVideo.id.videoId)
-        expect(screen.getByTestId(randomVideo.etag)).toBeInTheDocument();
-      else
-        expect(screen.getByTestId(randomVideo.etag)).not.toBeInTheDocument();
-    });
-
-    it('A video that does not have any description, must show channel title followed by a hypen', () => {
-      // render(<HomePage />);
-      // const videoWithDescription = youtubeVideos.items[2];
-      // if(videoWithDescription.snippet.description === '')
-      //   expect(screen.getByText('Wizeline -')).toBeInTheDocument();
-      // else
-      //   expect(screen.getByText('Wizeline -')).toBeInTheDocument();
-      // There must be a way... Right now I'm short of time...
-    });
-  });
+  // A video that has description, must show it'
+  let videoWithDescription = youtubeVideos.items[2];
+  expect(screen.getByText(videoWithDescription.snippet.description)).toBeInTheDocument();
+  
+  // A video that does not have any description, must show channel title followed by a hyphen'
+  videoWithDescription = youtubeVideos.items[8];
+  const formattedDate = new Date(videoWithDescription.snippet.publishedAt);
+  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(formattedDate);
+  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(formattedDate);
+  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(formattedDate);
+  expect(screen.getByText(`Wizeline - ${da} ${mo}, ${ye}`)).toBeInTheDocument();
 });

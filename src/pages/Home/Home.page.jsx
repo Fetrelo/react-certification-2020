@@ -4,26 +4,6 @@ import Nav from '../../components/Nav';
 import VideoCard from '../../components/VideoCard';
 import youtubeVideos from '../../mocks/youtube-videos';
 
-function HomePage() {
-  return (
-    <>
-      <Nav />
-      <BodyContainer>
-        <h1>YouTube video search app</h1>
-        <VideoGrid>
-          {youtubeVideos.items
-            .filter((obj) => obj.id.videoId && true)
-            .map((obj) => (
-              <VideoCard key={obj.id.videoId} data={obj} />
-            ))}
-        </VideoGrid>
-      </BodyContainer>
-    </>
-  );
-}
-
-export default HomePage;
-
 const BodyContainer = styled.div`
   padding: 5%;
 
@@ -42,3 +22,23 @@ const VideoGrid = styled.div`
     grid-gap: 1.5em;
   }
 `;
+
+function HomePage() {
+  return (
+    <>
+      <Nav />
+      <BodyContainer>
+        <h1>YouTube video search app</h1>
+        <VideoGrid role="grid">
+          {youtubeVideos.items
+            .filter((video) => video.id.videoId && true)
+            .map((video) => (
+              <VideoCard key={video.id.videoId} data={video} />
+            ))}
+        </VideoGrid>
+      </BodyContainer>
+    </>
+  );
+}
+
+export default HomePage;
