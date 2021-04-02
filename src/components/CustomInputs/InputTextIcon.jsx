@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { SearchContext } from '../../state/SearchResultsProvider';
 import SvgMagnifier from '../svg/SvgMagnifier';
 
 const Wrapper = styled.div`
@@ -42,13 +43,23 @@ const StyledInputText = styled.input`
 `;
 
 const InputTextIcon = () => {
+  const { search, setSearch, setFetchSearch } = useContext(SearchContext);
+
+  const handleChange = (e) => {
+    if (e.key === 'Enter') setFetchSearch(true);
+  };
+
   return (
     <Wrapper role="search">
       <SvgWrapper>
         <SvgMagnifier />
       </SvgWrapper>
       <InputWrapper>
-        <StyledInputText />
+        <StyledInputText
+          value={search}
+          onChange={(e) => setSearch(e.target.value.trim())}
+          onKeyUp={handleChange}
+        />
       </InputWrapper>
     </Wrapper>
   );

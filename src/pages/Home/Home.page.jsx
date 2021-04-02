@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Nav from '../../components/Nav';
 import VideoCard from '../../components/VideoCard';
-import youtubeVideos from '../../mocks/youtube-videos';
+import { SearchContext } from '../../state/SearchResultsProvider';
+//  import youtubeVideos from '../../mocks/youtube-videos';
 
 const BodyContainer = styled.div`
   padding: 5%;
@@ -24,17 +25,40 @@ const VideoGrid = styled.div`
 `;
 
 function HomePage() {
+  const { search, results, setResults, fetchSearch, setFetchSearch } = useContext(
+    SearchContext
+  );
+
+  useEffect(() => {
+    if (fetchSearch) {
+      setFetchSearch(false);
+      return async () => {
+        const params = new URLSearchParams({
+          key: process.env.REACT_APP_YT_API_KEY,
+          q: search,
+          part: 'snippet',
+          maxResults: '25',
+        });
+        const request = await fetch(
+          `https://www.googleapis.com/youtube/v3/search/?${params}`
+        );
+        const response = await request.json();
+        setResults(response);
+      };
+    }
+  }, [search, setResults, fetchSearch, setFetchSearch]);
+
   return (
     <>
       <Nav />
       <BodyContainer>
         <h1>YouTube video search app</h1>
         <VideoGrid role="grid">
-          {youtubeVideos.items
-            .filter((video) => video.id.videoId && true)
-            .map((video) => (
-              <VideoCard key={video.id.videoId} data={video} />
-            ))}
+          {results.items
+            ? results.items
+                .filter((video) => video.id.videoId && true)
+                .map((video) => <VideoCard key={video.id.videoId} data={video} />)
+            : null}
         </VideoGrid>
       </BodyContainer>
     </>
