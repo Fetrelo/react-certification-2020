@@ -1715,6 +1715,88 @@ const chess = {
   ]
 };
 
+const specificVideo = {
+  "kind": "youtube#videoListResponse",
+  "etag": "mcNgT2RZzW2jka_Tc6P3YyrnLNo",
+  "items": [
+    {
+      "kind": "youtube#video",
+      "etag": "4pwaelFBI7BvT8zQ_HosyZHdVbE",
+      "id": "3PvvmkfLWBc",
+      "snippet": {
+        "publishedAt": "2021-04-01T20:01:39Z",
+        "channelId": "UCcjIvuxmWlS5IEQ0JdPV4Ng",
+        "title": "UNBOXING DE UN CHARIZARD DE $30.000!!! (CAJA DE POKEMON #2)",
+        "description": "Like por este dia legendario\n\nDiscord: https://discord.gg/rubius\nMi Tienda: https://rubiuscorp.com\nStreams: https://www.twitch.tv/Rubius",
+        "thumbnails": {
+          "default": {
+            "url": "https://i.ytimg.com/vi/3PvvmkfLWBc/default.jpg",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://i.ytimg.com/vi/3PvvmkfLWBc/mqdefault.jpg",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://i.ytimg.com/vi/3PvvmkfLWBc/hqdefault.jpg",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://i.ytimg.com/vi/3PvvmkfLWBc/sddefault.jpg",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://i.ytimg.com/vi/3PvvmkfLWBc/maxresdefault.jpg",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "channelTitle": "Rubius Z",
+        "tags": [
+          "elrubius",
+          "rubius",
+          "pokemon",
+          "caja",
+          "cartas",
+          "charizard",
+          "willyrex",
+          "amigos",
+          "unboxing",
+          "caja legendaria",
+          "carta",
+          "sobre",
+          "sobres",
+          "1999",
+          "nuevo",
+          "2021",
+          "folagor",
+          "mewtwo",
+          "tcg",
+          "cards",
+          "base set",
+          "1st edition",
+          "new"
+        ],
+        "categoryId": "20",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "UNBOXING DE UN CHARIZARD DE $30.000!!! (CAJA DE POKEMON #2)",
+          "description": "Like por este dia legendario\n\nDiscord: https://discord.gg/rubius\nMi Tienda: https://rubiuscorp.com\nStreams: https://www.twitch.tv/Rubius"
+        },
+        "defaultAudioLanguage": "es"
+      }
+    }
+  ],
+  "pageInfo": {
+    "totalResults": 1,
+    "resultsPerPage": 1
+  }
+};
+
 export const handlers = [
   rest.get('https://www.googleapis.com/youtube/v3/search/', (req, res, ctx) => {
     const query = req.url.searchParams;
@@ -1724,5 +1806,8 @@ export const handlers = [
     if(searchString === 'chess')
       return res(ctx.status(200), ctx.json(chess));
     return res(ctx.status(200), ctx.json([]));
+  }),
+  rest.get('https://www.googleapis.com/youtube/v3/videos/', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(specificVideo));
   }),
 ];

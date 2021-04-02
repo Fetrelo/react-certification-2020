@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import InputTextIcon from './CustomInputs/InputTextIcon';
 import Toggle from './CustomInputs/Toggle';
 import SvgHamburger from './svg/SvgHamburger';
@@ -55,7 +56,9 @@ const Nav = () => {
   return (
     <StyledNav>
       <LeftNav role="group">
-        <SvgHamburger role="img" />
+        <Link to="/">
+          <SvgHamburger role="img" />
+        </Link>
         <InputTextIcon />
       </LeftNav>
       <RightNav role="group">

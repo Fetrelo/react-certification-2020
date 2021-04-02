@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Card = styled.article`
   overflow: hidden;
@@ -43,23 +44,28 @@ const Card = styled.article`
   }
 `;
 
-const VideoCard = ({ data }) => {
+const VideoCard = ({ data, fromPage }) => {
   const formattedDate = new Date(data.snippet.publishedAt);
   const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(formattedDate);
   const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(formattedDate);
   const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(formattedDate);
 
+  const description =
+    data.snippet.description !== '' ? (
+      <div>{data.snippet.description}</div>
+    ) : (
+      <div>{`${data.snippet.channelTitle} - ${da} ${mo}, ${ye}`}</div>
+    );
+
   return (
     <Card>
-      <header>
-        <img src={data.snippet.thumbnails.medium.url} alt={data.etag} />
-        <div>{data.snippet.title}</div>
-      </header>
-      {data.snippet.description !== '' ? (
-        <div>{data.snippet.description}</div>
-      ) : (
-        <div>{`${data.snippet.channelTitle} - ${da} ${mo}, ${ye}`}</div>
-      )}
+      <Link to={`/${data.id.videoId}`}>
+        <header>
+          <img src={data.snippet.thumbnails.medium.url} alt={data.etag} />
+          <div>{data.snippet.title}</div>
+        </header>
+      </Link>
+      {fromPage === 'home' ? description : null}
     </Card>
   );
 };

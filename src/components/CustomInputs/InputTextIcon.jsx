@@ -57,7 +57,7 @@ const InputTextIcon = () => {
       <InputWrapper>
         <StyledInputText
           value={search}
-          onChange={(e) => setSearch(e.target.value.trim())}
+          onChange={(e) => setSearch(e.target.value)}
           onKeyUp={handleChange}
         />
       </InputWrapper>
