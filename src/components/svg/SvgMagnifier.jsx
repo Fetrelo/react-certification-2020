@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 const StyledSvg = styled.svg`
-  fill: #525252;
+  fill: ${(props) => (props.theme === 'dark' ? '#be4f4f' : '#525252')};
   width: 1em;
   height: 1em;
   display: inline-block;

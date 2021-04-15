@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 const StyledHamburger = styled.svg`
-  fill: #525252;
+  fill: ${(props) => (props.theme === 'dark' ? '#be4f4f' : '#525252')};
   cursor: pointer;
   width: 20px;
   height: 20px;

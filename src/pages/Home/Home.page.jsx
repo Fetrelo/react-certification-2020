@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import VideoCard from '../../components/VideoCard';
 import useSearch from '../../hooks/useSearch';
-//  import youtubeVideos from '../../mocks/youtube-videos';
+import { GlobalContext } from '../../state/GlobalContextProvider';
 
 const BodyContainer = styled.div`
   padding: 5%;
+  background-color: ${(props) => (props.theme === 'dark' ? '#313131' : '#ffffff')};
 
   h1 {
     text-align: center;
     margin: 0px 0px 5% 0px;
-    color: #525252;
+    color: ${(props) => (props.theme === 'dark' ? '#be4f4f' : '#525252')};
   }
 `;
 
@@ -25,9 +26,10 @@ const VideoGrid = styled.div`
 
 function HomePage() {
   const results = useSearch();
+  const { state: theme } = useContext(GlobalContext);
 
   return (
-    <BodyContainer>
+    <BodyContainer theme={theme.theme}>
       <h1>YouTube video search app</h1>
       <VideoGrid role="grid">
         {results.items

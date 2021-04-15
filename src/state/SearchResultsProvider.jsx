@@ -8,7 +8,7 @@ const SearchContext = createContext({
 function SearchResultProvider({ children }) {
   const [search, setSearch] = useState('chess');
   const [results, setResults] = useState([]);
-  const [fetchSearch, setFetchSearch] = useState(false);
+  const [fetchSearch, setFetchSearch] = useState(true);
 
   return (
     <SearchContext.Provider

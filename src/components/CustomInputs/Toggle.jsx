@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { GlobalContext } from '../../state/GlobalContextProvider';
 
 const CheckBoxWrapper = styled.div`
   width: fit-content;
@@ -52,9 +53,13 @@ const CheckBox = styled.input`
 `;
 
 const Toggle = ({ labelOn, labelOff }) => {
+  const { dispatch } = useContext(GlobalContext);
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleCheck = () => setIsChecked(!isChecked);
+  const handleCheck = () => {
+    dispatch({ type: 'TOGGLE_THEME' });
+    setIsChecked(!isChecked);
+  };
 
   return (
     <CheckBoxWrapper role="switch">

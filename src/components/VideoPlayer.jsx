@@ -15,7 +15,7 @@ const VideoPlayer = ({ id }) => {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    return async () => {
+    (async () => {
       const params = new URLSearchParams({
         key: process.env.REACT_APP_YT_API_KEY,
         id,
@@ -27,7 +27,7 @@ const VideoPlayer = ({ id }) => {
       const response = await request.json();
       setTitle(response.items[0].snippet.title);
       setDescription(response.items[0].snippet.description);
-    };
+    })();
   }, [id]);
 
   return (
