@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const StyledLoginSvg = styled.svg`
   transition: 0.2s;
-  fill: #525252;
+  fill: ${(props) => (props.theme === 'dark' ? '#be4f4f' : '#525252')};
   width: 20px;
   height: 20px;
 `;

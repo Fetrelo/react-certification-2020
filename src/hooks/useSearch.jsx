@@ -9,7 +9,7 @@ function useSearch() {
   useEffect(() => {
     if (fetchSearch) {
       setFetchSearch(false);
-      return async () => {
+      (async () => {
         const params = new URLSearchParams({
           key: process.env.REACT_APP_YT_API_KEY,
           q: search,
@@ -21,7 +21,7 @@ function useSearch() {
         );
         const response = await request.json();
         setResults(response);
-      };
+      })();
     }
   }, [search, setResults, fetchSearch, setFetchSearch]);
 

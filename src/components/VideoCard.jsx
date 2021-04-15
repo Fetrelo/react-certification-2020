@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { GlobalContext } from '../state/GlobalContextProvider';
 
 const Card = styled.article`
-  overflow: hidden;
   border-radius: 5px;
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.75);
+  background-color: ${(props) => (props.theme === 'dark' ? '#5c5c5c' : '#ffffff')};
+  color: ${(props) => (props.theme === 'dark' ? '#c3c3c3' : '#7b7b7b')};
 
   header {
+    border-radius: 5px 5px 0px 0px;
     position: relative;
     width: 100%;
     max-height: 200px;
@@ -45,6 +48,7 @@ const Card = styled.article`
 `;
 
 const VideoCard = ({ data, fromPage }) => {
+  const { state: theme } = useContext(GlobalContext);
   const formattedDate = new Date(data.snippet.publishedAt);
   const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(formattedDate);
   const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(formattedDate);
@@ -58,7 +62,7 @@ const VideoCard = ({ data, fromPage }) => {
     );
 
   return (
-    <Card>
+    <Card theme={theme.theme}>
       <Link to={`/${data.id.videoId}`}>
         <header>
           <img src={data.snippet.thumbnails.medium.url} alt={data.etag} />

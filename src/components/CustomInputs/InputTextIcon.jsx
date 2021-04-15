@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { SearchContext } from '../../state/SearchResultsProvider';
+import { GlobalContext } from '../../state/GlobalContextProvider';
 import SvgMagnifier from '../svg/SvgMagnifier';
 
 const Wrapper = styled.div`
@@ -36,13 +37,14 @@ const StyledInputText = styled.input`
   padding-left: calc(1em + 25px);
   border: none;
   background-color: transparent;
-  color: #424242;
+  color: ${(props) => (props.theme === 'dark' ? '#be4f4f' : '#525252')};
   &:focus {
     outline: none;
   }
 `;
 
 const InputTextIcon = () => {
+  const { state: theme } = useContext(GlobalContext);
   const { search, setSearch, setFetchSearch } = useContext(SearchContext);
 
   const handleChange = (e) => {
@@ -52,13 +54,14 @@ const InputTextIcon = () => {
   return (
     <Wrapper role="search">
       <SvgWrapper>
-        <SvgMagnifier />
+        <SvgMagnifier theme={theme.theme} />
       </SvgWrapper>
       <InputWrapper>
         <StyledInputText
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyUp={handleChange}
+          theme={theme.theme}
         />
       </InputWrapper>
     </Wrapper>

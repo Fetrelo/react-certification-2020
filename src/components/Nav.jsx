@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import InputTextIcon from './CustomInputs/InputTextIcon';
 import Toggle from './CustomInputs/Toggle';
 import SvgHamburger from './svg/SvgHamburger';
 import SvgLogin from './svg/SvgLogin';
+import { GlobalContext } from '../state/GlobalContextProvider';
 
 const StyledNav = styled.nav`
   display: flex;
-  background-color: #e2e2e2;
+  background-color: ${(props) => (props.theme === 'dark' ? '#525252' : '#e2e2e2')};
   justify-content: space-between;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
 `;
@@ -53,18 +54,20 @@ const LoginButton = styled.div`
 `;
 
 const Nav = () => {
+  const { state: theme } = useContext(GlobalContext);
+
   return (
-    <StyledNav>
+    <StyledNav theme={theme.theme}>
       <LeftNav role="group">
         <Link to="/">
-          <SvgHamburger role="img" />
+          <SvgHamburger role="img" theme={theme.theme} />
         </Link>
         <InputTextIcon />
       </LeftNav>
       <RightNav role="group">
         <Toggle labelOn="🌙" labelOff="☀️" />
         <LoginButton role="button">
-          <SvgLogin />
+          <SvgLogin theme={theme.theme} />
         </LoginButton>
       </RightNav>
     </StyledNav>

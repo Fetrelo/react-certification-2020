@@ -8,7 +8,13 @@ test('Ensure the elements get rendered', () => {
   render(<HomePage />);
   expect(screen.getByRole('heading', { name: /YouTube video search app/i })).toBeInTheDocument();
   expect(screen.getByRole('grid')).toBeInTheDocument();
-  expect(screen.getAllByRole('article')).toBeTruthy();
+
+  const arts = screen.getAllByRole('article');
+  expect(arts).toBeTruthy();
+
+  // We can count the articles -> actual # of videos returned by the API
+  // To check ->
+  expect(getByRole(arts[0], 'header', { name: youtubeVideos.items[0].snippet.title }));
 });
 
 test('The information from the mock data is rendered as expected', () => {
