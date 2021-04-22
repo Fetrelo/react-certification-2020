@@ -1,18 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { GlobalContext } from '../state/GlobalContextProvider';
+import SvgFav from './svg/SvgFav';
+import SvgFaved from './svg/SvgFaved';
 
 const VideoWrapper = styled.article`
   display: flex;
   flex-direction: column;
 
-  div {
+  & > div {
     padding: 1% 2%;
   }
 `;
 
+const TitleDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const VideoPlayer = ({ id }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const {
+    state: { favVideos, sessionData },
+    favVideo,
+    unfavVideo,
+  } = useContext(GlobalContext);
+  const [videoData, setVideoData] = useState({
+    id: { videoId: id },
+    snippet: { title: '', description: '' },
+  });
+
+  const {
+    id: { videoId },
+    snippet: { title, description },
+  } = videoData;
 
   useEffect(() => {
     (async () => {
@@ -25,10 +46,22 @@ const VideoPlayer = ({ id }) => {
         `https://www.googleapis.com/youtube/v3/videos/?${params}`
       );
       const response = await request.json();
-      setTitle(response.items[0].snippet.title);
-      setDescription(response.items[0].snippet.description);
+      const vData = {
+        id: { videoId: response.items[0].id },
+        etag: response.items[0].etag,
+        snippet: {
+          title: response.items[0].snippet.title,
+          description: response.items[0].snippet.description,
+          thumbnails: {
+            medium: { url: response.items[0].snippet.thumbnails.medium.url },
+          },
+        },
+      };
+      setVideoData(vData);
     })();
   }, [id]);
+
+  const isFav = favVideos.some((v) => v.id.videoId === videoId);
 
   return (
     <VideoWrapper>
@@ -39,7 +72,24 @@ const VideoPlayer = ({ id }) => {
         src={`https://www.youtube.com/embed/${id}`}
       />
       <div>
-        <h2>{title}</h2>
+        <TitleDiv>
+          <h2>{title}</h2>
+          {sessionData && sessionData.isAuthenticated ? (
+            isFav ? (
+              <SvgFaved
+                onClick={() => {
+                  unfavVideo(videoData);
+                }}
+              />
+            ) : (
+              <SvgFav
+                onClick={() => {
+                  favVideo(videoData);
+                }}
+              />
+            )
+          ) : null}
+        </TitleDiv>
         <p>{description}</p>
       </div>
     </VideoWrapper>
