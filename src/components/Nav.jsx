@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import InputTextIcon from './CustomInputs/InputTextIcon';
 import Toggle from './CustomInputs/Toggle';
-import SvgHamburger from './svg/SvgHamburger';
+import SvgHome from './svg/SvgHome';
 import SvgLogin from './svg/SvgLogin';
 import { GlobalContext } from '../state/GlobalContextProvider';
+import Login from './Login';
 
 const StyledNav = styled.nav`
   display: flex;
@@ -53,24 +54,102 @@ const LoginButton = styled.div`
   }
 `;
 
+const ContextualMenu = styled.ul`
+  opacity: 0;
+  display: none;
+  z-index: 2;
+  position: absolute;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  transition: 0.3s;
+  cursor: pointer;
+  padding: 0;
+
+  a {
+    text-decoration: none;
+  }
+
+  li {
+    transition: 0.3s;
+    background-color: ${(props) => (props.theme === 'dark' ? '#525252' : '#e2e2e2')};
+    padding: 0.25em 0.5em;
+    color: ${(props) => (props.theme === 'dark' ? '#e2e2e2' : '#525252')};
+
+    &:hover {
+      background-color: ${(props) => (props.theme === 'dark' ? '#e2e2e2' : '#525252')};
+      color: ${(props) => (props.theme === 'dark' ? '#525252' : '#e2e2e2')};
+    }
+  }
+`;
+
+const AvatarWrapper = styled.div`
+  position: relative;
+
+  &:hover ${ContextualMenu} {
+    opacity: 1;
+    display: inline;
+  }
+`;
+
+const StyledAvatar = styled.img`
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+`;
+
+const LogoutBtn = styled.li`
+  transition: 0.3s;
+`;
+
 const Nav = () => {
-  const { state: theme } = useContext(GlobalContext);
+  const {
+    state: { theme, showLoginModal, sessionData },
+    dispatch,
+    logout,
+  } = useContext(GlobalContext);
 
   return (
-    <StyledNav theme={theme.theme}>
-      <LeftNav role="group">
-        <Link to="/">
-          <SvgHamburger role="img" theme={theme.theme} />
-        </Link>
-        <InputTextIcon />
-      </LeftNav>
-      <RightNav role="group">
-        <Toggle labelOn="🌙" labelOff="☀️" />
-        <LoginButton role="button">
-          <SvgLogin theme={theme.theme} />
-        </LoginButton>
-      </RightNav>
-    </StyledNav>
+    <>
+      {showLoginModal ? <Login /> : null}
+      <StyledNav theme={theme}>
+        <LeftNav role="group">
+          <Link to="/">
+            <SvgHome role="img" theme={theme} />
+          </Link>
+          <InputTextIcon />
+        </LeftNav>
+        <RightNav role="group">
+          <Toggle labelOn="🌙" labelOff="☀️" />
+          {sessionData && sessionData.isAuthenticated ? (
+            <AvatarWrapper>
+              <StyledAvatar src={sessionData.avatarUrl} alt="avatar" />
+              <ContextualMenu theme={theme}>
+                <Link to="/favs">
+                  <li>Favourites</li>
+                </Link>
+                <LogoutBtn
+                  onClick={() => {
+                    logout();
+                  }}
+                >
+                  Log out
+                </LogoutBtn>
+              </ContextualMenu>
+            </AvatarWrapper>
+          ) : (
+            <LoginButton
+              role="button"
+              onClick={() => {
+                dispatch({ type: 'TOGGLE_LOGIN' });
+              }}
+            >
+              <SvgLogin theme={theme} />
+            </LoginButton>
+          )}
+        </RightNav>
+      </StyledNav>
+    </>
   );
 };
 

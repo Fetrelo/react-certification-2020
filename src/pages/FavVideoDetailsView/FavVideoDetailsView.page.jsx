@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import VideoCard from '../../components/VideoCard';
 import VideoPlayer from '../../components/VideoPlayer';
-import useSearch from '../../hooks/useSearch';
 import { GlobalContext } from '../../state/GlobalContextProvider';
 
 const BodyContainer = styled.div`
@@ -36,23 +35,24 @@ const VideoList = styled.div`
 `;
 
 function VideoDetailsView() {
-  const { state: theme } = useContext(GlobalContext);
+  const {
+    state: { theme, favVideos },
+  } = useContext(GlobalContext);
   const { id } = useParams();
-  const results = useSearch();
 
   return (
     <BodyContainer theme={theme.theme}>
       <VideoPlayer id={id} />
       <VideoList role="list">
-        {results.items
-          ? results.items
+        {favVideos
+          ? favVideos
               .filter((video) => video.id.videoId && true)
               .map((video) => (
                 <VideoCard
                   key={video.id.videoId}
                   data={video}
                   showDesc={false}
-                  goto="/"
+                  goto="/favs/"
                 />
               ))
           : null}

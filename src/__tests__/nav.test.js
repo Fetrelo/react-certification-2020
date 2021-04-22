@@ -1,11 +1,19 @@
 import React from 'react';
+import { MemoryRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import {fireEvent, render, screen} from '@testing-library/react';
 import Toggle from '../components/CustomInputs/Toggle';
 import Nav from '../components/Nav';
+import GlobalContextProvider from '../state/GlobalContextProvider';
 
 test('Ensure header components get rendered', () => {
-  render(<Nav />);
+  render(
+    <GlobalContextProvider>
+      <Router>
+        <Nav />
+      </Router>
+    </GlobalContextProvider>
+  );
   expect(screen.getByRole('navigation')).toBeInTheDocument();
   expect(screen.getAllByRole('group').length).toEqual(2);
   expect(screen.getByRole('img')).toBeInTheDocument();
@@ -16,7 +24,9 @@ test('Ensure header components get rendered', () => {
 
 test('Toggle component check', () => {
   const {queryByLabelText, getByLabelText} = render(
-    <Toggle labelOn="🌙" labelOff="☀️" />
+    <GlobalContextProvider>
+      <Toggle labelOn="🌙" labelOff="☀️" />
+    </GlobalContextProvider>
   );
 
   expect(queryByLabelText(/☀️/i)).toBeTruthy();

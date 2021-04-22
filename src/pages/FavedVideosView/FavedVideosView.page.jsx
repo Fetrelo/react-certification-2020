@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import VideoCard from '../../components/VideoCard';
-import useSearch from '../../hooks/useSearch';
 import { GlobalContext } from '../../state/GlobalContextProvider';
 
 const BodyContainer = styled.div`
@@ -24,19 +23,20 @@ const VideoGrid = styled.div`
   }
 `;
 
-function HomePage() {
-  const results = useSearch();
-  const { state: theme } = useContext(GlobalContext);
+function FavedVideosView() {
+  const {
+    state: { theme, favVideos },
+  } = useContext(GlobalContext);
 
   return (
     <BodyContainer theme={theme.theme}>
-      <h1>YouTube video search app</h1>
+      <h1>Marked as &quot;Favourite&quot; videos</h1>
       <VideoGrid role="grid">
-        {results.items
-          ? results.items
-              .filter((video) => video.id && video.id.videoId && true)
+        {favVideos
+          ? favVideos
+              .filter((video) => video.id.videoId && true)
               .map((video) => (
-                <VideoCard key={video.id.videoId} data={video} showDesc goto="/" />
+                <VideoCard key={video.id.videoId} data={video} showDesc goto="/favs/" />
               ))
           : null}
       </VideoGrid>
@@ -44,4 +44,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default FavedVideosView;

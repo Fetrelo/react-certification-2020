@@ -44,7 +44,9 @@ const StyledInputText = styled.input`
 `;
 
 const InputTextIcon = () => {
-  const { state: theme } = useContext(GlobalContext);
+  const {
+    state: { theme },
+  } = useContext(GlobalContext);
   const { search, setSearch, setFetchSearch } = useContext(SearchContext);
 
   const handleChange = (e) => {
@@ -54,14 +56,14 @@ const InputTextIcon = () => {
   return (
     <Wrapper role="search">
       <SvgWrapper>
-        <SvgMagnifier theme={theme.theme} />
+        <SvgMagnifier theme={theme} />
       </SvgWrapper>
       <InputWrapper>
         <StyledInputText
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyUp={handleChange}
-          theme={theme.theme}
+          theme={theme}
         />
       </InputWrapper>
     </Wrapper>
